@@ -93,7 +93,7 @@ func getRecentPosts(posts []ephemeris.BlogEntry, count int) []ephemeris.BlogEntr
 	sort.Slice(posts, func(i, j int) bool {
 		a := posts[i].Date
 		b := posts[j].Date
-		return a.Before(b)
+		return a.After(b)
 	})
 
 	// Build up the given number of posts.
@@ -649,6 +649,14 @@ func outputIndex(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry)
 	pageData.RecentPosts = recentPosts
 	pageData.Prefix = config.Prefix
 
+	// Sort by date - posts will be in order they've been written
+	// newest first
+	sort.Slice(pageData.Entries, func(i, j int) bool {
+		a := pageData.Entries[i].Date
+		b := pageData.Entries[j].Date
+		return a.After(b)
+	})
+
 	//
 	// Create the output file.
 	//
@@ -767,6 +775,14 @@ func outputEntries(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 	// comment-submission.
 	pageData.Prefix = config.Prefix
 	pageData.CommentAPI = config.CommentAPI
+
+	// Sort by date - posts will be in order they've been written
+	// newest first
+	sort.Slice(pageData.RecentPosts, func(i, j int) bool {
+		a := pageData.RecentPosts[i].Date
+		b := pageData.RecentPosts[j].Date
+		return a.After(b)
+	})
 
 	//
 	// Create a per-page output
